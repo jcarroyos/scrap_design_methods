@@ -4,6 +4,7 @@ This project scrapes data from the following websites:
 
 - [Dave Birss Free Resources](https://davebirss.com/free-resources/)
 - [Hyper Island Toolbox](https://hyperisland.com/en/toolbox)
+- [IDEO Design Kit Methods](https://www.designkit.org/methods.html)
 
 ## Usage
 
@@ -85,4 +86,36 @@ function scrapeWebsite(htmlBlockClass) {
 
 // Example usage in the browser console
 scrapeWebsite('lMnBhZ3gjfo2MMbjeZ19');
+```
+
+
+### IDEO
+
+```javascript
+function extractFiguresToCSV() {
+    const figures = document.querySelectorAll("figure.cap-full");
+    let csvContent = "Title;Description;Link;Image Path\n";
+    
+    figures.forEach(figure => {
+        const title = figure.querySelector(".methods-title")?.textContent.trim() || "";
+        const description = figure.querySelector(".methods-text")?.textContent.trim() || "";
+        const link = figure.querySelector("a")?.getAttribute("href") || "";
+        const imagePath = figure.querySelector("img")?.getAttribute("src") || "";
+        
+        csvContent += `${title};${description};${link};${imagePath}\n`;
+    });
+    
+    // Crear y descargar el archivo CSV
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "figures_data.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Ejecutar la función
+extractFiguresToCSV();
+
 ```
